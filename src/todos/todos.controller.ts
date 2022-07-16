@@ -1,5 +1,12 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { CreateProjectDTO } from './dtos/create-project.dto';
+import { CreateToDoDTO } from './dtos/create-todo.dto';
 import { TodosService } from './todos.service';
 
 @Controller('todos')
@@ -9,5 +16,17 @@ export class TodosController {
   @Post('/create-project')
   async createProject(@Req() { user }, @Body() { name }: CreateProjectDTO) {
     return await this.todosService.createProject(user.id, name);
+  }
+
+  @Post('/create-todo')
+  async createToDo(@Body() { projectId, title }: CreateToDoDTO) {
+    if (!(await this.todosService.findProject(projectId))) {
+      throw new BadRequestException({
+        message: 'Project not found',
+        type: 'error.projectNotFound',
+      });
+    }
+
+    return this.todosService.createToDo(projectId, title);
   }
 }

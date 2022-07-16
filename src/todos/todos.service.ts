@@ -6,6 +6,14 @@ import { CreateProjectDTO } from './dtos/create-project.dto';
 export class TodosService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  findProject(id: string) {
+    return this.prismaService.projects.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   createProject(userId: string, name: string) {
     return this.prismaService.projects.create({
       data: {
@@ -13,6 +21,19 @@ export class TodosService {
         user: {
           connect: {
             id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  createToDo(projectId, title: string) {
+    return this.prismaService.todo.create({
+      data: {
+        title,
+        project: {
+          connect: {
+            id: projectId,
           },
         },
       },
