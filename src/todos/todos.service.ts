@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateProjectDTO } from './dtos/create-project.dto';
-
 @Injectable()
 export class TodosService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -38,6 +36,17 @@ export class TodosService {
             id: userId,
           },
         },
+      },
+    });
+  }
+
+  updateProject(projectId, newName) {
+    return this.prismaService.projects.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        name: newName,
       },
     });
   }
