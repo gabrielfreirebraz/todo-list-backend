@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Req,
 } from '@nestjs/common';
@@ -28,5 +29,10 @@ export class TodosController {
     }
 
     return this.todosService.createToDo(projectId, title);
+  }
+
+  @Get()
+  async findAllProject(@Req() { user }) {
+    return this.todosService.findAllProjects(user.id);
   }
 }

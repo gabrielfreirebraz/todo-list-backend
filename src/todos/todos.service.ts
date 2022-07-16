@@ -14,6 +14,21 @@ export class TodosService {
     });
   }
 
+  findAllProjects(userId) {
+    return this.prismaService.projects.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        todos: {
+          select: {
+            project: true,
+          },
+        },
+      },
+    });
+  }
+
   createProject(userId: string, name: string) {
     return this.prismaService.projects.create({
       data: {

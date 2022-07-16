@@ -13,8 +13,6 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
     const [type, value] = authorization.split(' ');
 
-    console.log({ type, value });
-
     if (type !== 'Bearer' || !value) {
       return res.sendStatus(401);
     }
