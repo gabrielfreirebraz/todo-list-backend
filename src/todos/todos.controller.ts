@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -37,6 +38,25 @@ export class TodosController {
     return await this.todosService.updateProject(id, name);
   }
 
+  @Delete('/delete-project/:id')
+  async deleteProject(@Param('id') id: string) {
+    if (!(await this.todosService.findProject(id))) {
+      throw new BadRequestException({
+        message: 'Project not found',
+        type: 'error.projectNotFound',
+      });
+    }
+
+    await this.todosService.deleteProject(id);
+
+    return {};
+  }
+
+  @Get()
+  async findAllProject(@Req() { user }) {
+    return await this.todosService.findAllProjects(user.id);
+  }
+
   @Post('/create-todo')
   async createToDo(@Body() { projectId, title }: CreateToDoDTO) {
     if (!(await this.todosService.findProject(projectId))) {
@@ -49,8 +69,17 @@ export class TodosController {
     return await this.todosService.createToDo(projectId, title);
   }
 
-  @Get()
-  async findAllProject(@Req() { user }) {
-    return await this.todosService.findAllProjects(user.id);
+  @Delete('/delete-todo/:id')
+  async deleteToDo(@Param('id') id: string) {
+    if (!(await this.todosService.findToDo(id))) {
+      throw new BadRequestException({
+        message: 'ToDo not found',
+        type: 'error.toDoNotFound',
+      });
+    }
+
+    await this.todosService.deleteToDo(id);
+
+    return {};
   }
 }

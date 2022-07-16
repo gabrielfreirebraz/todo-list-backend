@@ -20,7 +20,8 @@ export class TodosService {
       include: {
         todos: {
           select: {
-            project: true,
+            title: true,
+            id: true,
           },
         },
       },
@@ -51,6 +52,22 @@ export class TodosService {
     });
   }
 
+  deleteProject(projectId) {
+    return this.prismaService.projects.delete({
+      where: {
+        id: projectId,
+      },
+    });
+  }
+
+  findToDo(todoId) {
+    return this.prismaService.todo.findUnique({
+      where: {
+        id: todoId,
+      },
+    });
+  }
+
   createToDo(projectId, title: string) {
     return this.prismaService.todo.create({
       data: {
@@ -60,6 +77,14 @@ export class TodosService {
             id: projectId,
           },
         },
+      },
+    });
+  }
+
+  deleteToDo(todoId) {
+    return this.prismaService.todo.delete({
+      where: {
+        id: todoId,
       },
     });
   }
