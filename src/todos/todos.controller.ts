@@ -52,7 +52,7 @@ export class TodosController {
     return {};
   }
 
-  @Get('/projects')
+  @Get()
   async findAllProject(@Req() { user }) {
     return await this.todosService.findAllProjects(user.id);
   }
